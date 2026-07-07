@@ -1,4 +1,5 @@
 // Auth context — provides user state + login/register/logout to the app
+<<<<<<< HEAD
 // import { createContext } from 'react';
 
 // export const AuthContext = createContext(null);
@@ -93,3 +94,27 @@ export const useAuthStore = create((set) => ({
   
 }));
  
+=======
+import { createContext } from 'react';
+
+export const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+
+  const value = {
+    user: null,
+    token: null,
+    loading: false,
+    isAuthenticated: false,
+    login: async () => {},
+    register: async () => {},
+    logout: () => {},
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28

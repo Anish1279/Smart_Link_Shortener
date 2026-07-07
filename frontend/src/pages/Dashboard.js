@@ -3,9 +3,12 @@ import React from 'react';
 import { Container, Typography, Button, Box, Paper } from '@mui/material';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import { Link as RouterLink } from 'react-router-dom';
+<<<<<<< HEAD
 import HeroSection from '../components/Layout/Herosection';
 import Stats from '../components/Layout/Stats';
 import Footer from '../components/Layout/Footer';
+=======
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
 
 const Dashboard = () => {
   return (
@@ -19,6 +22,7 @@ const Dashboard = () => {
       <Paper sx={{ p: 4, textAlign: 'center' }}>
         <Typography variant="h6" color="text.secondary">No links yet</Typography>
       </Paper>
+<<<<<<< HEAD
       <div>
       <HeroSection/>
     <Stats/>
@@ -26,6 +30,9 @@ const Dashboard = () => {
     </div>
     </Container>
     
+=======
+    </Container>
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
   );
 };
 

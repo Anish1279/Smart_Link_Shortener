@@ -2,6 +2,7 @@
 import React from 'react';
 import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+<<<<<<< HEAD
 import { useAuthStore } from '../context/AuthContext';
 import { Loader2 } from "lucide-react";
 import { Link } from 'react-router-dom';
@@ -44,6 +45,10 @@ const Register = () => {
 
   }
 
+=======
+
+const Register = () => {
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
@@ -51,6 +56,7 @@ const Register = () => {
           <PersonAddIcon sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
           <Typography variant="h4" component="h1" gutterBottom>Create Account</Typography>
         </Box>
+<<<<<<< HEAD
         <Box component="form" noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} 
           onSubmit={handleSubmit}>
  <TextField
@@ -99,6 +105,15 @@ const Register = () => {
             Already have an account ? <Link to="/login" className="link link-primary">Sign in </Link>
           </p>
         </div>
+=======
+        <Box component="form" noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField label="Full Name" type="text" fullWidth required />
+          <TextField label="Email" type="email" fullWidth required />
+          <TextField label="Password" type="password" fullWidth required />
+          <TextField label="Confirm Password" type="password" fullWidth required />
+          <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 1 }}>Create Account</Button>
+        </Box>
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
       </Paper>
     </Container>
   );

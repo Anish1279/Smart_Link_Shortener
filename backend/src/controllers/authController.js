@@ -1,4 +1,5 @@
 // Auth controller — register + login
+<<<<<<< HEAD
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { generateToken } = require('../utils/generateToken');
@@ -44,10 +45,17 @@ const register = async (req, res, next) => {
     console.log('Error in register controller:', err);
     return res.status(500).json({ message: 'Server error' });
   }
+=======
+
+// POST /api/auth/register
+const register = async (req, res, next) => {
+  res.status(501).json({ message: 'register — not implemented' });
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
 };
 
 // POST /api/auth/login
 const login = async (req, res, next) => {
+<<<<<<< HEAD
   const { email, password } = req.body;
 
   try {
@@ -91,3 +99,9 @@ const logout = async (req, res, next) => {
 };
 
 module.exports = { register, login, logout };
+=======
+  res.status(501).json({ message: 'login — not implemented' });
+};
+
+module.exports = { register, login };
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28

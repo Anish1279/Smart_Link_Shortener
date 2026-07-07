@@ -14,7 +14,11 @@ const app = express();
 // Global middleware
 app.use(helmet());
 app.use(cors({
+<<<<<<< HEAD
   origin:  'http://localhost:3000',
+=======
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+>>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
   credentials: true,
 }));
 if (process.env.NODE_ENV !== 'test') {
