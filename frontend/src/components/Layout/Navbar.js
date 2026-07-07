@@ -1,10 +1,19 @@
 // App Navbar
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LinkIcon from '@mui/icons-material/Link';
+import { useAuthStore } from '../../context/AuthContext';
 
 const Navbar = () => {
+  const { authUser, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
   return (
     <AppBar position="sticky" elevation={0} sx={{ backgroundColor: 'background.paper' }}>
       <Toolbar>
@@ -13,8 +22,17 @@ const Navbar = () => {
           SmartLink
         </Typography>
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button color="inherit" component={RouterLink} to="/login">Login</Button>
-          <Button variant="contained" component={RouterLink} to="/register">Register</Button>
+          {authUser ? (
+            <>
+              <Button color="inherit" component={RouterLink} to="/dashboard">Dashboard</Button>
+              <Button variant="outlined" color="error" onClick={handleLogout}>Logout</Button>
+            </>
+          ) : (
+            <>
+              <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+              <Button variant="contained" component={RouterLink} to="/register">Register</Button>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
