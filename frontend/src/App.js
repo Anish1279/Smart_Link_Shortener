@@ -14,6 +14,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import CreateLink from './pages/CreateLink';
 import Analytics from './pages/Analytics';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -35,6 +37,7 @@ function App() {
       <CssBaseline />
       <Router>
         <Navbar />
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/dashboard" />} />
           <Route path="/register" element={!authUser ? <Register /> : <Navigate to="/dashboard" />} />
