@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Button, Box, Paper, List, ListItem, ListItemText, Link as MuiLink } from '@mui/material';
 import AddLinkIcon from '@mui/icons-material/AddLink';
+import AnalyticsIcon from '@mui/icons-material/BarChart';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Link as RouterLink } from 'react-router-dom';
 import api from '../api/axiosInstance';
@@ -75,8 +76,8 @@ const Dashboard = () => {
                 <ListItem key={link._id} divider={index !== links.length - 1}>
                   <ListItemText
                     primary={
-                      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
                           <Typography variant="subtitle1" fontWeight="bold">
                             <MuiLink href={shortUrl} target="_blank" rel="noopener noreferrer">
                               {shortUrl}
@@ -88,10 +89,19 @@ const Dashboard = () => {
                           }}>
                             Copy
                           </Button>
+                         
                         </Box>
-                        <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                          Clicks: {link.clickCount || 0}
-                        </Typography>
+                         <Button
+                            size="small"
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<AnalyticsIcon />}
+                            component={RouterLink}
+                            to={`/analytics/${link._id}`}
+                          >
+                            Analytics
+                          </Button>
+                       
                       </Box>
                     }
                     secondary={`Original: ${link.longUrl}`}

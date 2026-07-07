@@ -52,7 +52,7 @@ function App() {
               <CreateLink />
             </ProtectedRoute>
           } />
-          <Route path="/analytics/:id" element={
+          <Route path="/analytics/:linkId" element={
             <ProtectedRoute>
               <Analytics />
             </ProtectedRoute>
