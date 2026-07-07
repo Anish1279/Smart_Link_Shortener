@@ -52,6 +52,11 @@ const handleRedirect = async (req, res, next) => {
       console.error('Failed to log click event:', err);
     });
 
+    // Increment click count asynchronously
+    Link.updateOne({ _id: link._id }, { $inc: { clickCount: 1 } }).catch(err => {
+      console.error('Failed to update click count:', err);
+    });
+
     // 302 Redirect to long URL (302 forces browsers to hit our server every time)
     res.redirect(302, link.longUrl);
   } catch (error) {

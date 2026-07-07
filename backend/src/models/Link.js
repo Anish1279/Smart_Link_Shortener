@@ -7,8 +7,11 @@ const linkSchema = new mongoose.Schema(
     longUrl: { type: String },
     shortCode: { type: String },
     customAlias: { type: String, default: null },
-    expiresAt: { type: Date, default: null },
+    expiresAt: { type: Date,index: {
+      expires: 0,
+    }, default: null },
     isActive: { type: Boolean, default: true },
+    clickCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

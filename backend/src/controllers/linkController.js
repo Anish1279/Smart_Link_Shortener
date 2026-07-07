@@ -72,4 +72,14 @@ const getLinkAnalytics = async (req, res, next) => {
   res.status(501).json({ message: 'Analytics milestone not yet implemented' });
 };
 
-module.exports = { createLink, getMyLinks, getLinkAnalytics };
+// GET /api/links/click-counts
+const getClickCounts = async (req, res, next) => {
+  try {
+    const links = await Link.find({ ownerId: req.user.id }).select('_id shortCode customAlias clickCount').sort({ createdAt: -1 });
+    res.status(200).json(links);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createLink, getMyLinks, getLinkAnalytics, getClickCounts };
