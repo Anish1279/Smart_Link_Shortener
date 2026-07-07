@@ -1,67 +1,41 @@
-// Auth context — provides user state + login/register/logout to the app
-<<<<<<< HEAD
-// import { createContext } from 'react';
-
-// export const AuthContext = createContext(null);
-
-// export const AuthProvider = ({ children }) => {
-
-//   const value = {
-//     user: null,
-//     token: null,
-//     loading: false,
-//     isAuthenticated: false,
-//     login: async () => {},
-//     register: async () => {},
-//     logout: () => {},
-//   };
-
-//   return (
-//     <AuthContext.Provider value={value}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
+// Auth context — Zustand store for auth state
 import api from '../api/axiosInstance';
-
-
-import { create } from "zustand";
-import { toast } from "react-toastify";
+import { create } from 'zustand';
+import { toast } from 'react-toastify';
 
 export const useAuthStore = create((set) => ({
   authUser: null,
-  
   setAuthUser: (user) => set({ authUser: user }),
   isSigningUp: false,
   isLoggingIn: false,
   isCheckingAuth: true,
+
   checkAuth: async () => {
-
     try {
-      const response = await api.get('/auth/check-auth');
+      const response = await api.post('/auth/refresh');
       if (response.status === 200) {
-        set({ authUser: response.data.user, isCheckingAuth: false });
-
+        // Store the new access token
+        localStorage.setItem('accessToken', response.data.accessToken);
+        set({ authUser: response.data, isCheckingAuth: false });
       } else {
         set({ authUser: null, isCheckingAuth: false });
       }
     } catch (error) {
-      console.error('Error checking authentication:', error);
       set({ authUser: null, isCheckingAuth: false });
     }
   },
 
-  signup: async (data)=>{
-
-    set({isSigningUp:true});
-    try{
+  signup: async (data) => {
+    set({ isSigningUp: true });
+    try {
       const response = await api.post('/auth/register', data);
-      toast.success("Account created successfully!");
-      set({authUser:response.data});
+      localStorage.setItem('accessToken', response.data.accessToken);
+      toast.success('Account created successfully!');
+      set({ authUser: response.data });
     } catch (error) {
-      toast.error("Error creating account.");
+      toast.error(error.response?.data?.message || 'Error creating account.');
     } finally {
-      set({isSigningUp:false});
+      set({ isSigningUp: false });
     }
   },
 
@@ -69,52 +43,24 @@ export const useAuthStore = create((set) => ({
     set({ isLoggingIn: true });
     try {
       const response = await api.post('/auth/login', data);
+      localStorage.setItem('accessToken', response.data.accessToken);
       toast.success('Logged in successfully!');
       set({ authUser: response.data });
     } catch (error) {
-      toast.error('Error logging in.');
+      toast.error(error.response?.data?.message || 'Error logging in.');
     } finally {
       set({ isLoggingIn: false });
     }
   },
 
-  loout:async()=>{
-
-    try{
-      const response = await api.post('/auth/logout');
-      set({authUser:null});
-      toast.success("Logged out successfully!");
-    }catch(err){
-      toast.error("Error logging out.");
+  logout: async () => {
+    try {
+      await api.post('/auth/logout');
+      localStorage.removeItem('accessToken');
+      set({ authUser: null });
+      toast.success('Logged out successfully!');
+    } catch (err) {
+      toast.error('Error logging out.');
     }
-  }
-
-
-      
-  
+  },
 }));
- 
-=======
-import { createContext } from 'react';
-
-export const AuthContext = createContext(null);
-
-export const AuthProvider = ({ children }) => {
-
-  const value = {
-    user: null,
-    token: null,
-    loading: false,
-    isAuthenticated: false,
-    login: async () => {},
-    register: async () => {},
-    logout: () => {},
-  };
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28

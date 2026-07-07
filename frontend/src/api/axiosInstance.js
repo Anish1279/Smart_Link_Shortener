@@ -2,20 +2,19 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/constants';
 
-<<<<<<< HEAD
-
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
 
-=======
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+// Attach access token to every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
-
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
 export default api;

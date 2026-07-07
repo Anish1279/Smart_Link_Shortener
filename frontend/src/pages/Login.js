@@ -2,7 +2,6 @@
 import React from 'react';
 import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-<<<<<<< HEAD
 import { useAuthStore } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Loader2 } from 'lucide-react';
@@ -20,10 +19,6 @@ const Login = () => {
     login({ email: formData.email, password: formData.password });
   };
 
-=======
-
-const Login = () => {
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
@@ -31,7 +26,6 @@ const Login = () => {
           <LoginIcon sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
           <Typography variant="h4" component="h1" gutterBottom>Welcome Back</Typography>
         </Box>
-<<<<<<< HEAD
 
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
@@ -60,12 +54,6 @@ const Login = () => {
               'Sign In'
             )}
           </Button>
-=======
-        <Box component="form" noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField label="Email" type="email" fullWidth required />
-          <TextField label="Password" type="password" fullWidth required />
-          <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 1 }}>Sign In</Button>
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
         </Box>
       </Paper>
     </Container>
@@ -73,7 +61,3 @@ const Login = () => {
 };
 
 export default Login;
-<<<<<<< HEAD
-
-=======
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28

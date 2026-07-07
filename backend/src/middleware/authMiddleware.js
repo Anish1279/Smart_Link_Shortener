@@ -1,21 +1,17 @@
-// JWT auth middleware — verify token, attach user to req
-<<<<<<< HEAD
+// JWT auth middleware — verify access token from Authorization header
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Not authorized, no token' });
     }
 
+    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decoded) {
-      return res.status(401).json({ message: 'Not authorized, token failed' });
-    }
 
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
@@ -25,14 +21,8 @@ const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    console.log('Error in auth middleware:', err);
-    res.status(401).json({ message: 'Not authorized, token failed' });
+    return res.status(401).json({ message: 'Not authorized, token invalid or expired' });
   }
-=======
-
-const protect = async (req, res, next) => {
-  res.status(501).json({ message: 'auth middleware — not implemented' });
->>>>>>> df3686a1f13df9eb097890139fab6eafd81e6e28
 };
 
 module.exports = { protect };
