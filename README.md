@@ -155,9 +155,19 @@ npm start
 3. **Analytics dashboard** — MongoDB aggregation pipelines → MUI charts with range filters
 4. **Rate limiting + TTL + hot-link cache** — Throttle creation, TTL-based expiry, in-memory cache
 
-## Architecture Notes
+## Implementation Details & Trade-offs
 
-- **302 (not 301) redirects**: 301 is cached by browsers, which would bypass our click tracking. 302 ensures every click hits our server.
-- **IP hashing**: We never store raw IPs. SHA-256 hashing preserves privacy while still allowing unique-visitor approximation.
-- **nanoid v3**: Used instead of v5 because v5 is ESM-only and this project uses CommonJS.
-- **Fire-and-forget click recording**: The redirect response is sent immediately; click recording happens asynchronously so the user isn't delayed.
+### Architecture & Trade-offs
+- **Fire-and-forget Click Recording**: In the redirect controller, click tracking (`ClickEvent.create`) and click count incrementing (`$inc`) run asynchronously without blocking the main thread (`await` is deliberately omitted). This ensures minimal latency for end-users during redirects, with the trade-off that a database write failure might silently drop a click event.
+- **302 (not 301) Redirects**: 301 redirects are heavily cached by browsers, which would bypass our click tracking for repeat visitors. A 302 temporary redirect forces browsers to hit our server every time.
+- **Rate Limiting Placeholder**: While rate limiting is a stated milestone, the current `rateLimiter` middleware uses a dummy passthrough (`next()`). Implementing true rate limiting (e.g., with Redis) is pending to keep the MVP stack simple.
+- **Real-time Aggregation vs Pre-aggregation**: Analytics (e.g., browser/device breakdown, clicks over time) are computed in real-time using heavy MongoDB `$facet` aggregation pipelines rather than pre-aggregating data periodically. This prioritizes real-time accuracy over read performance.
+- **In-Memory Cache omitted**: Redirect lookups currently perform direct database queries (`Link.findOne`) rather than utilizing an in-memory cache layer. This trades read performance at scale for simplicity in the current implementation.
+- **nanoid v3**: Used instead of v5 because v5 is ESM-only and this backend is built with CommonJS.
+
+### Edge Cases Handled
+- **Collision Resistance**: Shortcodes are generated using `nanoid(8)`, and explicit `while(!isUnique)` loops verify the code against the database to guarantee zero collisions upon generation.
+- **Custom Alias Conflicts**: If a user requests a custom alias that already exists, the API gracefully rejects it with a 400 error rather than throwing a database duplicate key error.
+- **Graceful Deactivation & TTL Expiry**: When processing redirects, the app strictly checks `!link.isActive` and `link.expiresAt`. If a link is soft-deleted or its TTL has expired, it renders a customized 410 Gone HTML page instead of failing silently or redirecting maliciously.
+- **Privacy-Preserving IP Tracking**: Raw IP addresses are never stored. The system captures IPs (accounting for proxy headers like `x-forwarded-for`) and immediately hashes them via SHA-256 to allow unique-visitor tracking without violating privacy laws.
+- **Robust User-Agent Parsing**: Browser and device derivations don't rely on massive external regex libraries. Instead, they use a streamlined MongoDB `$switch` aggregation at the DB level, handling missing user-agents and providing reliable fallbacks ("Other"/"Desktop").
